@@ -33,9 +33,11 @@ ALTER TABLE post_comment
 
 CREATE TABLE post_details
 (
-    id   BIGINT NOT NULL,
-    name VARCHAR(255),
-    CONSTRAINT pk_post_details PRIMARY KEY (id)
+    id         BIGINT  NOT NULL,
+    name       VARCHAR(255),
+    deleted_id UUID    NOT NULL DEFAULT gen_random_uuid(),
+    deleted    BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT pk_post_details PRIMARY KEY (id, deleted_id)
 );
 
 ALTER TABLE post_details

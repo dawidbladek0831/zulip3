@@ -21,7 +21,7 @@ internal class Post(
     val tags: MutableSet<Tag> = mutableSetOf(),
 
     @OneToOne(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
-    val details: PostDetails
+    var details: PostDetails?
 ) : BaseEntity<Long>() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +33,8 @@ internal class Post(
 
     fun link() {
         comments.forEach { it.post = this }
-        details.post = this
-        details.id = this.id
+        details?.post = this
+        details?.id = this.id
     }
 
     companion object

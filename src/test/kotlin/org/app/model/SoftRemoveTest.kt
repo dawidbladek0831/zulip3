@@ -6,6 +6,7 @@ import org.app.common.DbData
 import org.app.common.findById
 import org.app.model.post.Post
 import org.app.model.post.PostComment
+import org.app.model.post.PostDetails
 import org.app.model.tag.Tag
 import org.hibernate.reactive.mutiny.Mutiny
 import org.junit.jupiter.api.Assertions
@@ -74,6 +75,81 @@ internal class SoftRemoveTest {
         Assertions.assertEquals(db.count(PostComment::class), 2L)
     }
 
+    @Test
+    fun shouldMarkPostDetailsAsDeleted() {
+        sf.withTransaction { session -> session.persist(Post.maximal()) }.await().indefinitely()
+
+        sf.withTransaction { session ->
+            session.find(PostDetails::class.java, 1L)
+                .flatMap { session.remove(it) }
+        }.await().indefinitely()
+
+        val result = sf.findById(PostDetails::class, 1L).await().indefinitely()
+        Assertions.assertNull(result)
+        Assertions.assertEquals(db.count(PostDetails::class), 1)
+
+        val post = sf.findById(Post::class, 1L).await().indefinitely()
+        Assertions.assertNull(post.details)
+    }
+
+    @Test
+    fun shouldInsertPostDetailsAfterMarkingAsDeleted() {
+        sf.withTransaction { session -> session.persist(Post.maximal()) }.await().indefinitely()
+
+        sf.withTransaction { session ->
+            session.find(PostDetails::class.java, 1L)
+                .flatMap { session.remove(it) }
+        }.await().indefinitely()
+
+        sf.withTransaction { session ->
+            session.find(Post::class.java, 1L)
+                .flatMap { post ->
+                    post.details = PostDetails("details2")
+                    post.link()
+                    session.persist(post)
+                }
+        }.await().indefinitely()
+
+        Assertions.assertEquals(2, db.count(PostDetails::class))
+
+        val post = sf.findById(Post::class, 1L).await().indefinitely()
+        Assertions.assertNotNull(post.details)
+        Assertions.assertEquals(1L, post.details?.id)
+
+        val postDetails = sf.findById(PostDetails::class, 1L).await().indefinitely()
+        Assertions.assertNotNull(post.details)
+    }
+
+    @Test
+    fun shouldMarkPostDetailsAsDeletedTwoTimes() {
+        sf.withTransaction { session -> session.persist(Post.maximal()) }.await().indefinitely()
+
+        sf.withTransaction { session ->
+            session.find(PostDetails::class.java, 1L)
+                .flatMap { session.remove(it) }
+        }.await().indefinitely()
+
+        sf.withTransaction { session ->
+            session.find(Post::class.java, 1L)
+                .flatMap { post ->
+                    post.details = PostDetails("details2")
+                    post.link()
+                    session.persist(post)
+                }
+        }.await().indefinitely()
+
+        sf.withTransaction { session ->
+            session.find(PostDetails::class.java, 1L)
+                .flatMap { session.remove(it) }
+        }.await().indefinitely()
+
+        val post = sf.findById(Post::class, 1L).await().indefinitely()
+        Assertions.assertNull(post.details)
+
+        Assertions.assertEquals(2, db.count(PostDetails::class))
+    }
+
+
     @Inject
     lateinit var db: DbData
 
@@ -82,5 +158,6 @@ internal class SoftRemoveTest {
         db.truncate(Tag::class)
         db.truncate(Post::class)
         db.truncate(PostComment::class)
+        db.truncate(PostDetails::class)
     }
 }

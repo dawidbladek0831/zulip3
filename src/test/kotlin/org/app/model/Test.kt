@@ -4,6 +4,8 @@ import io.quarkus.test.junit.QuarkusTest
 import jakarta.inject.Inject
 import org.app.common.DbDataManipulation
 import org.app.model.post.Post
+import org.app.model.post.PostComment
+import org.app.model.post.PostDetails
 import org.app.model.tag.Tag
 import org.hibernate.reactive.mutiny.Mutiny
 import org.junit.jupiter.api.Assertions
@@ -33,6 +35,7 @@ internal class Test {
 
         Assertions.assertEquals(result.id, 1L)
         Assertions.assertEquals(result.comments.size, 2)
+        Assertions.assertNotNull(result.details)
     }
 
     @Inject
@@ -42,5 +45,7 @@ internal class Test {
     fun beforeEach() {
         db.truncate(Tag::class)
         db.truncate(Post::class)
+        db.truncate(PostComment::class)
+        db.truncate(PostDetails::class)
     }
 }

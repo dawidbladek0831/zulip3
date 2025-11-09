@@ -14,18 +14,23 @@ internal class Post(
 
     @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinTable(name = "post_tag", joinColumns = [JoinColumn(name = "post_id")], inverseJoinColumns = [JoinColumn(name = "tag_id")])
-    val tags: MutableSet<Tag> = mutableSetOf()
+    val tags: MutableSet<Tag> = mutableSetOf(),
+
+    @OneToOne(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val details: PostDetails
 ) : BaseEntity<Long>() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override val id: Long? = null
 
     init {
-        linkRelations()
+        link()
     }
 
-    fun linkRelations() {
+    fun link() {
         comments.forEach { it.post = this }
+        details.post = this
+        details.id = this.id
     }
 
     companion object

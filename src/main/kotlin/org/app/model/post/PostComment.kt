@@ -5,7 +5,7 @@ import org.app.base.BaseEntity
 
 @Entity
 @Table(name = "post_comment")
-internal class PostComment(
+internal data class PostComment(
     val content: String
 ) : BaseEntity<Long>() {
     @Id
@@ -14,6 +14,14 @@ internal class PostComment(
 
     @ManyToOne(fetch = FetchType.LAZY)
     var post: Post? = null
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
 
     companion object
 }

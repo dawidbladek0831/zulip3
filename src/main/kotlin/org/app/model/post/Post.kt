@@ -6,7 +6,7 @@ import org.app.model.tag.Tag
 
 @Entity
 @Table(name = "post")
-internal class Post(
+internal data class Post(
     val name: String,
 
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
@@ -31,6 +31,14 @@ internal class Post(
         comments.forEach { it.post = this }
         details.post = this
         details.id = this.id
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
     }
 
     companion object

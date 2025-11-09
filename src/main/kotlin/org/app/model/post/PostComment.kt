@@ -9,7 +9,7 @@ import org.hibernate.annotations.SQLRestriction
 @SQLRestriction("deleted = FALSE")
 @Entity
 @Table(name = "post_comment")
-internal class PostComment(
+internal data class PostComment(
     val content: String,
 
     val deleted: Boolean = false
@@ -20,6 +20,14 @@ internal class PostComment(
 
     @ManyToOne(fetch = FetchType.LAZY)
     var post: Post? = null
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
 
     companion object
 }

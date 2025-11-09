@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 @SQLRestriction("deleted = FALSE")
 @Entity
 @Table(name = "post_details")
-internal class PostDetails(
+internal data class PostDetails(
     val name: String,
 
     val deleted: Boolean = false
@@ -22,6 +22,14 @@ internal class PostDetails(
     @JoinColumn(name = "id")
     @OneToOne(fetch = FetchType.LAZY)
     var post: Post? = null
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
 
     companion object
 }

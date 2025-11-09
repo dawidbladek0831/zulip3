@@ -9,7 +9,7 @@ import org.hibernate.annotations.SQLRestriction
 @SQLRestriction("deleted = FALSE")
 @Entity
 @Table(name = "tag")
-internal class Tag(
+internal data class Tag(
     val name: String,
 
     val deleted: Boolean = false
@@ -17,6 +17,14 @@ internal class Tag(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override val id: Long? = null
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
 
     companion object
 }

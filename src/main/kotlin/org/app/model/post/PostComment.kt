@@ -5,10 +5,10 @@ import org.app.base.BaseEntity
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
 
-@SQLDelete(sql = "UPDATE comment SET deleted = TRUE WHERE id = $1")
+@SQLDelete(sql = "UPDATE post_comment SET deleted = TRUE WHERE id = $1")
 @SQLRestriction("deleted = FALSE")
 @Entity
-@Table(name = "comment")
+@Table(name = "post_comment")
 internal class PostComment(
     val content: String,
 

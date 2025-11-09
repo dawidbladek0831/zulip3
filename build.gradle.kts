@@ -28,6 +28,10 @@ dependencies {
     implementation("io.quarkus:quarkus-hibernate-orm")
     implementation("io.quarkus:quarkus-jdbc-postgresql")
 
+    // FLYWAY
+    implementation("io.quarkus:quarkus-flyway")
+    implementation("io.quarkus:quarkus-jdbc-postgresql")
+
     implementation("io.quarkus:quarkus-rest")
     implementation("io.quarkus:quarkus-rest-kotlin-serialization")
 

@@ -1,0 +1,7 @@
+CREATE TABLE tag
+(
+    id      BIGSERIAL NOT NULL,
+    name    VARCHAR(255),
+    deleted BOOLEAN   NOT NULL DEFAULT FALSE,
+    CONSTRAINT pk_tag PRIMARY KEY (id)
+);

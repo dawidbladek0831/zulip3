@@ -2,11 +2,17 @@ package org.app.model.tag
 
 import jakarta.persistence.*
 import org.app.base.BaseEntity
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
 
+@SQLDelete(sql = "UPDATE tag SET deleted = TRUE WHERE id = $1")
+@SQLRestriction("deleted = FALSE")
 @Entity
 @Table(name = "tag")
 internal class Tag(
-    val name: String
+    val name: String,
+
+    val deleted: Boolean = false
 ) : BaseEntity<Long>() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

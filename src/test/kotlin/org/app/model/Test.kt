@@ -2,11 +2,10 @@ package org.app.model
 
 import io.quarkus.test.junit.QuarkusTest
 import jakarta.inject.Inject
-import org.app.common.DbDataManipulation
+import org.app.common.DbData
 import org.app.model.post.Post
 import org.app.model.tag.Tag
 import org.hibernate.reactive.mutiny.Mutiny
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,7 +36,7 @@ internal class Test {
     }
 
     @Inject
-    lateinit var db: DbDataManipulation
+    lateinit var db: DbData
 
     @BeforeEach
     fun beforeEach() {

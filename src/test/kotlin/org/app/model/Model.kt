@@ -3,6 +3,7 @@ package org.app.model
 import org.app.model.post.Post
 import org.app.model.post.PostComment
 import org.app.model.post.PostDetails
+import org.app.model.post.PostTag
 import org.app.model.tag.Tag
 
 
@@ -21,7 +22,8 @@ internal fun Post.Companion.maximal(): Post = Post(
         PostComment("comment1"),
         PostComment("comment2"),
     ),
-    tags = mutableSetOf(
+    tags = mutableListOf(
+        PostTag(Tag.maximal().apply { id = 1L }),
     ),
     details = PostDetails("details1")
 )

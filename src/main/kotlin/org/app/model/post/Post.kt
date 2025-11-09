@@ -9,14 +9,13 @@ import org.app.model.tag.Tag
 internal data class Post(
     val name: String,
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE], orphanRemoval = true)
     val comments: MutableList<PostComment> = mutableListOf(),
 
-    @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    @JoinTable(name = "post_tag", joinColumns = [JoinColumn(name = "post_id")], inverseJoinColumns = [JoinColumn(name = "tag_id")])
-    val tags: MutableSet<Tag> = mutableSetOf(),
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE], orphanRemoval = true)
+    val tags: MutableList<PostTag> = mutableListOf(),
 
-    @OneToOne(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToOne(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE], orphanRemoval = true)
     val details: PostDetails
 ) : BaseEntity<Long>() {
     @Id
@@ -31,6 +30,7 @@ internal data class Post(
         comments.forEach { it.post = this }
         details.post = this
         details.id = this.id
+        tags.forEach { it.post = this }
     }
 
     override fun equals(other: Any?): Boolean {

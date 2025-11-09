@@ -10,7 +10,7 @@ internal data class Tag(
 ) : BaseEntity<Long>() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    override val id: Long? = null
+    override var id: Long? = null
 
     override fun equals(other: Any?): Boolean {
         return super.equals(other)

@@ -4,7 +4,7 @@ import jakarta.persistence.*
 import org.app.base.BaseEntity
 
 @Entity
-@Table(name = "comment")
+@Table(name = "post_comment")
 internal class PostComment(
     val content: String
 ) : BaseEntity<Long>() {

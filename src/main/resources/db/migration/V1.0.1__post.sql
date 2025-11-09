@@ -8,8 +8,9 @@ CREATE TABLE post
 
 CREATE TABLE post_tag
 (
-    post_id BIGINT NOT NULL,
-    tag_id  BIGINT NOT NULL,
+    post_id BIGINT  NOT NULL,
+    tag_id  BIGINT  NOT NULL,
+    deleted BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_post_tag PRIMARY KEY (post_id, tag_id)
 );
 

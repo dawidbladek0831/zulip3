@@ -149,6 +149,47 @@ internal class SoftRemoveTest {
         Assertions.assertEquals(2, db.count(PostDetails::class))
     }
 
+    @Test
+    fun shouldNotReturnTagsMarkedAsDeleted() {
+        sf.withTransaction { session -> session.persist(Tag.maximal()) }.await().indefinitely()
+        val tag =  sf.findById(Tag::class, 1L).await().indefinitely()
+        sf.withTransaction { session -> session.persist(Post.maximal().copy(
+            tags = mutableSetOf(tag)
+        )) }.await().indefinitely()
+
+        sf.withTransaction { session ->
+            session.find(Tag::class.java, 1L)
+                .flatMap { session.remove(it) }
+        }.await().indefinitely()
+
+
+        Assertions.assertEquals(1, db.count(Tag::class))
+        val post = sf.findById(Post::class, 1L).await().indefinitely()
+        Assertions.assertEquals(0, post.tags.size)
+    }
+
+    @Test
+    fun shouldNotReturnTagsMarkedAsDeletedInJoinTable() {
+        sf.withTransaction { session -> session.persist(Tag.maximal()) }.await().indefinitely()
+        val tag =  sf.findById(Tag::class, 1L).await().indefinitely()
+        sf.withTransaction { session -> session.persist(Post.maximal().copy(
+            tags = mutableSetOf(tag)
+        )) }.await().indefinitely()
+
+        sf.withTransaction { session ->
+            session.find(Post::class.java, 1L)
+                .flatMap { post ->
+                    post.tags.clear()
+                    session.merge(post)
+                }
+        }.await().indefinitely()
+
+
+        Assertions.assertEquals(1, db.count("post_tag"))
+        val post = sf.findById(Post::class, 1L).await().indefinitely()
+        Assertions.assertEquals(0, post.tags.size)
+    }
+
 
     @Inject
     lateinit var db: DbData

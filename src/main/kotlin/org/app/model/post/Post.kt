@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import org.app.base.BaseEntity
 import org.app.model.tag.Tag
 import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLJoinTableRestriction
 import org.hibernate.annotations.SQLRestriction
 
 @SQLDelete(sql = "UPDATE post SET deleted = TRUE WHERE id = $1")
@@ -16,7 +17,7 @@ internal data class Post(
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     val comments: MutableList<PostComment> = mutableListOf(),
 
-    @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "post_tag", joinColumns = [JoinColumn(name = "post_id")], inverseJoinColumns = [JoinColumn(name = "tag_id")])
     val tags: MutableSet<Tag> = mutableSetOf(),
 

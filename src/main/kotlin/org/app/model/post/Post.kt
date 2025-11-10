@@ -2,7 +2,6 @@ package org.app.model.post
 
 import jakarta.persistence.*
 import org.app.base.BaseEntity
-import org.app.model.tag.Tag
 
 @Entity
 @Table(name = "post")

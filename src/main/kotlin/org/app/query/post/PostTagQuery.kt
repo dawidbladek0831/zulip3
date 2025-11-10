@@ -1,28 +1,25 @@
-package org.app.model.post
+package org.app.query.post
 
 import jakarta.persistence.*
-import org.app.model.tag.Tag
+import org.app.model.post.PostTagId
+import org.app.query.tag.TagQuery
+import org.hibernate.annotations.Immutable
 
 
 @Entity
+@Immutable
 @Table(name = "post_tag")
 @IdClass(PostTagId::class)
-internal class PostTag(
+internal class PostTagQuery(
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tag_id")
-    val tag: Tag
+    val tag: TagQuery
 ) {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    var post: Post? = null
+    var post: PostQuery? = null
 
     companion object
 }
-
-internal data class PostTagId(
-    val post: Long? = null,
-    val tag: Long? = null
-)
-

@@ -4,9 +4,10 @@ import jakarta.persistence.*
 import org.app.base.BaseEntity
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
+import java.time.LocalDateTime
 
-@SQLDelete(sql = "UPDATE post SET deleted = TRUE WHERE id = $1")
-@SQLRestriction("deleted = FALSE")
+@SQLDelete(sql = "UPDATE post SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1")
+@SQLRestriction("deleted_at IS NULL")
 @Entity
 @Table(name = "post")
 internal data class Post(
@@ -21,7 +22,7 @@ internal data class Post(
     @OneToOne(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE], orphanRemoval = true)
     var details: PostDetails?,
 
-    val deleted: Boolean = false
+    val deletedAt: LocalDateTime? = null
 ) : BaseEntity<Long>() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

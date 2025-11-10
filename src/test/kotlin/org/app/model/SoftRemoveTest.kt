@@ -36,7 +36,27 @@ internal class SoftRemoveTest {
             sf.findById(Post::class, 1L).await().indefinitely()
             Assertions.assertEquals(db.count(Tag::class), 1L)
         }
+    }
 
+    @Nested
+    inner class PostTests {
+        @Test
+        fun shouldUpdatePostInsteadOfDeleting() {
+            db.insert(Tag.maximal())
+            db.insert(Post.maximal())
+
+            sf.withTransaction { session ->
+                session.find(Post::class.java, 1L)
+                    .flatMap { session.remove(it) }
+            }.await().indefinitely()
+
+            val result = sf.findById(Post::class, 1L).await().indefinitely()
+            Assertions.assertNull(result)
+            Assertions.assertEquals(1L, db.count(Post::class))
+            Assertions.assertEquals(2L, db.count(PostComment::class))
+            Assertions.assertEquals(1L, db.count(PostDetails::class))
+            Assertions.assertEquals(1L, db.count(PostTag::class))
+        }
     }
 
     @Nested

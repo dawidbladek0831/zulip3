@@ -2,7 +2,7 @@ CREATE TABLE post
 (
     id      BIGSERIAL NOT NULL,
     name    VARCHAR(255),
-    deleted BOOLEAN   NOT NULL DEFAULT FALSE,
+    deleted_at TIMESTAMP,
     CONSTRAINT pk_post PRIMARY KEY (id)
 );
 

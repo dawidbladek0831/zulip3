@@ -2,7 +2,7 @@ package org.app.model
 
 import io.quarkus.test.junit.QuarkusTest
 import jakarta.inject.Inject
-import org.app.common.DbDataManipulation
+import org.app.common.DbData
 import org.app.model.post.Post
 import org.app.model.post.PostComment
 import org.app.model.post.PostDetails
@@ -42,7 +42,7 @@ internal class Test {
     }
 
     @Inject
-    lateinit var db: DbDataManipulation
+    lateinit var db: DbData
 
     @BeforeEach
     fun beforeEach() {

@@ -4,7 +4,6 @@ import jakarta.persistence.*
 import org.app.base.BaseEntity
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
-import java.time.LocalDateTime
 
 @SQLDelete(sql = "UPDATE post_details SET deleted = TRUE WHERE id = $1")
 @SQLRestriction("deleted = FALSE")

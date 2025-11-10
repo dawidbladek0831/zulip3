@@ -1,22 +1,23 @@
-package org.app.model.tag
+package org.app.query.post
 
 import jakarta.persistence.*
 import org.app.base.BaseEntity
-import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Immutable
 import org.hibernate.annotations.SQLRestriction
 
-@SQLDelete(sql = "UPDATE tag SET deleted = TRUE WHERE id = $1")
 @SQLRestriction("deleted = FALSE")
 @Entity
-@Table(name = "tag")
-internal data class Tag(
-    val name: String,
-
-    val deleted: Boolean = false
+@Immutable
+@Table(name = "post_comment")
+internal data class PostCommentQuery(
+    val content: String
 ) : BaseEntity<Long>() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    override var id: Long? = null
+    override val id: Long? = null
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    var post: PostQuery? = null
 
     override fun equals(other: Any?): Boolean {
         return super.equals(other)

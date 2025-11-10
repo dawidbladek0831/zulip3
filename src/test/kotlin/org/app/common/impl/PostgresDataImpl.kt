@@ -6,7 +6,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Table
 import org.app.common.DbData
 import org.app.common.executeOnVertex
-import org.app.model.tag.Tag
 import org.hibernate.reactive.mutiny.Mutiny
 import kotlin.reflect.KClass
 

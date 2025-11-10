@@ -1,18 +1,16 @@
-package org.app.model.tag
+package org.app.query.tag
 
 import jakarta.persistence.*
 import org.app.base.BaseEntity
-import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Immutable
 import org.hibernate.annotations.SQLRestriction
 
-@SQLDelete(sql = "UPDATE tag SET deleted = TRUE WHERE id = $1")
 @SQLRestriction("deleted = FALSE")
 @Entity
+@Immutable
 @Table(name = "tag")
-internal data class Tag(
-    val name: String,
-
-    val deleted: Boolean = false
+internal data class TagQuery(
+    val name: String
 ) : BaseEntity<Long>() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

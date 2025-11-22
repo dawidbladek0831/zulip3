@@ -1,20 +1,20 @@
-package org.app.model.post
+package org.app.model.person
 
 import jakarta.persistence.*
 import org.app.base.BaseEntity
 
 @Entity
-@Table(name = "post_details")
-internal data class PostDetails(
-    val name: String,
+@Table(name = "person_address")
+internal data class PersonAddress(
+    val street: String,
 ) : BaseEntity<Long>() {
     @Id
     override var id: Long? = null
 
     @MapsId
     @JoinColumn(name = "id")
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    var post: Post? = null
+    @OneToOne(fetch = FetchType.LAZY)
+    var person: Person? = null
 
     override fun equals(other: Any?): Boolean {
         return super.equals(other)

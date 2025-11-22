@@ -2,5 +2,5 @@ CREATE TABLE tag
 (
     id   BIGSERIAL NOT NULL,
     name VARCHAR(255),
-    CONSTRAINT pk_tag PRIMARY KEY (id)
+    CONSTRAINT pk__tag PRIMARY KEY (id)
 );

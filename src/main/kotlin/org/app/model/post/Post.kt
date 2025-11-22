@@ -2,24 +2,35 @@ package org.app.model.post
 
 import jakarta.persistence.*
 import org.app.base.BaseEntity
+import org.app.model.tag.Tag
 
 @Entity
 @Table(name = "post")
+@NamedEntityGraph(
+    name = "Post.full",
+    attributeNodes = [
+        NamedAttributeNode("comments"),
+        NamedAttributeNode("tags"),
+        NamedAttributeNode("details")
+    ]
+)
 internal data class Post(
     val name: String,
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE], orphanRemoval = true)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
     val comments: MutableList<PostComment> = mutableListOf(),
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE], orphanRemoval = true)
-    val tags: MutableList<PostTag> = mutableListOf(),
+    @ManyToMany
+    @JoinTable(name = "post_tag", joinColumns = [JoinColumn(name = "post_id")], inverseJoinColumns = [JoinColumn(name = "tag_id")])
+    val tags: MutableSet<Tag> = mutableSetOf(),
 
-    @OneToOne(mappedBy = "post", fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE], orphanRemoval = true)
+    @PrimaryKeyJoinColumn
+    @OneToOne(mappedBy = "post", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], optional = false)
     val details: PostDetails
 ) : BaseEntity<Long>() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    override val id: Long? = null
+    override var id: Long? = null
 
     init {
         link()
@@ -29,7 +40,6 @@ internal data class Post(
         comments.forEach { it.post = this }
         details.post = this
         details.id = this.id
-        tags.forEach { it.post = this }
     }
 
     override fun equals(other: Any?): Boolean {

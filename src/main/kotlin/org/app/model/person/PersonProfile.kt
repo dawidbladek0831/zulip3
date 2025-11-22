@@ -1,18 +1,20 @@
-package org.app.query.tag
+package org.app.model.person
 
 import jakarta.persistence.*
 import org.app.base.BaseEntity
-import org.hibernate.annotations.Immutable
 
 @Entity
-@Immutable
-@Table(name = "tag")
-internal data class TagQuery(
-    val name: String
+@Table(name = "person_profile")
+internal data class PersonProfile(
+    val nickname: String,
 ) : BaseEntity<Long>() {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null
+
+    @MapsId
+    @JoinColumn(name = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    var person: Person? = null
 
     override fun equals(other: Any?): Boolean {
         return super.equals(other)

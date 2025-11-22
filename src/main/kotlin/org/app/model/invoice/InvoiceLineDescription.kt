@@ -1,21 +1,19 @@
-package org.app.query.post
+package org.app.model.invoice
 
 import jakarta.persistence.*
 import org.app.base.BaseEntity
-import org.hibernate.annotations.Immutable
 
 @Entity
-@Immutable
-@Table(name = "post_comment")
-internal data class PostCommentQuery(
-    val content: String
+@Table(name = "invoice_line_description")
+internal data class InvoiceLineDescription(
+    var description: String
 ) : BaseEntity<Long>() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    override val id: Long? = null
+    override var id: Long? = null
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    var post: PostQuery? = null
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    var invoiceLine: InvoiceLine? = null
 
     override fun equals(other: Any?): Boolean {
         return super.equals(other)

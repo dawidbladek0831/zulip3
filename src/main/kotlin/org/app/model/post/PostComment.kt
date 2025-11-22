@@ -6,13 +6,13 @@ import org.app.base.BaseEntity
 @Entity
 @Table(name = "post_comment")
 internal data class PostComment(
-    val content: String
+    var content: String
 ) : BaseEntity<Long>() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    override val id: Long? = null
+    override var id: Long? = null
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     var post: Post? = null
 
     override fun equals(other: Any?): Boolean {

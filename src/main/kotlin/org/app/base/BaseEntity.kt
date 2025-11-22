@@ -2,9 +2,9 @@ package org.app.base
 
 import org.hibernate.proxy.HibernateProxy
 
-abstract class BaseEntity<ID> {
+internal abstract class BaseEntity<ID> {
 
-    abstract val id: ID?
+    abstract var id: ID?
 
     override fun equals(
         other: Any?

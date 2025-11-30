@@ -3,6 +3,7 @@ plugins {
     kotlin("plugin.jpa") version "2.2.20"
     kotlin("plugin.allopen") version "2.2.20"
     kotlin("plugin.serialization") version "2.2.20"
+    id("org.jetbrains.kotlin.kapt") version "2.2.20"
     id("io.quarkus")
 }
 
@@ -27,6 +28,9 @@ dependencies {
 
     implementation("io.quarkus:quarkus-hibernate-orm")
     implementation("io.quarkus:quarkus-jdbc-postgresql")
+
+    kapt("org.hibernate.orm:hibernate-processor:7.1.4.Final")
+    annotationProcessor("org.hibernate.orm:hibernate-processor:7.1.4.Final")
 
     // FLYWAY
     implementation("io.quarkus:quarkus-flyway")
